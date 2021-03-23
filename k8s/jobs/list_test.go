@@ -36,7 +36,7 @@ var _ = Describe("List", func() {
 	})
 
 	JustBeforeEach(func() {
-		tasks, err = lister.List()
+		tasks, err = lister.List(ctx)
 	})
 
 	It("succeeds", func() {

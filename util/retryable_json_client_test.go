@@ -43,7 +43,7 @@ var _ = Describe("RetryableJSONClient", func() {
 		})
 
 		JustBeforeEach(func() {
-			err = retryableJSONClient.Post(server.URL(), data)
+			err = retryableJSONClient.Post(ctx, server.URL(), data)
 		})
 
 		It("succeeds", func() {

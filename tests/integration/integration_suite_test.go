@@ -23,7 +23,10 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
-var fixture *tests.Fixture
+var (
+	fixture *tests.Fixture
+	ctx     context.Context
+)
 
 var _ = BeforeSuite(func() {
 	fixture = tests.NewFixture(GinkgoWriter)
@@ -31,6 +34,7 @@ var _ = BeforeSuite(func() {
 
 var _ = BeforeEach(func() {
 	fixture.SetUp()
+	ctx = context.Background()
 })
 
 var _ = AfterEach(func() {

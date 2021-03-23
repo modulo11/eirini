@@ -176,7 +176,7 @@ var _ = Describe("TaskHandler", func() {
 
 		It("retrives a task", func() {
 			Expect(taskBifrost.GetTaskCallCount()).To(Equal(1))
-			actualGUID := taskBifrost.GetTaskArgsForCall(0)
+			_, actualGUID := taskBifrost.GetTaskArgsForCall(0)
 			Expect(actualGUID).To(Equal("guid_1234"))
 
 			var taskResponse cf.TaskResponse

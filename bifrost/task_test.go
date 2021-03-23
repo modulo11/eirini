@@ -79,7 +79,7 @@ var _ = Describe("Task", func() {
 			Expect(actualTaskRequest).To(Equal(taskRequest))
 
 			Expect(taskClient.DesireCallCount()).To(Equal(1))
-			namespace, desiredTask, _ := taskClient.DesireArgsForCall(0)
+			_, namespace, desiredTask, _ := taskClient.DesireArgsForCall(0)
 			Expect(desiredTask.GUID).To(Equal("my-guid"))
 			Expect(namespace).To(Equal("our-namespace"))
 		})
@@ -117,7 +117,7 @@ var _ = Describe("Task", func() {
 		})
 
 		JustBeforeEach(func() {
-			taskResponse, err = taskBifrost.GetTask(taskGUID)
+			taskResponse, err = taskBifrost.GetTask(ctx, taskGUID)
 		})
 
 		It("succeeds", func() {
@@ -149,7 +149,7 @@ var _ = Describe("Task", func() {
 		})
 
 		JustBeforeEach(func() {
-			tasksResponse, err = taskBifrost.ListTasks()
+			tasksResponse, err = taskBifrost.ListTasks(ctx)
 		})
 
 		It("succeeds", func() {
@@ -191,7 +191,7 @@ var _ = Describe("Task", func() {
 		})
 
 		JustBeforeEach(func() {
-			err = taskBifrost.CancelTask(taskGUID)
+			err = taskBifrost.CancelTask(ctx, taskGUID)
 		})
 
 		It("succeeds", func() {
@@ -216,7 +216,7 @@ var _ = Describe("Task", func() {
 		It("notifies the cloud controller", func() {
 			Eventually(jsonClient.PostCallCount).Should(Equal(1))
 
-			url, data := jsonClient.PostArgsForCall(0)
+			_, url, data := jsonClient.PostArgsForCall(0)
 			Expect(url).To(Equal("the/callback/url"))
 			Expect(data).To(Equal(cf.TaskCompletedRequest{
 				TaskGUID:      taskGUID,
@@ -251,13 +251,13 @@ var _ = Describe("Task", func() {
 
 		When("cloud controller notification takes forever", func() {
 			It("still succeeds", func(done Done) {
-				jsonClient.PostStub = func(string, interface{}) error {
+				jsonClient.PostStub = func(context.Context, string, interface{}) error {
 					<-make(chan interface{}) // block forever
 
 					return nil
 				}
 
-				err = taskBifrost.CancelTask(taskGUID)
+				err = taskBifrost.CancelTask(ctx, taskGUID)
 
 				Expect(err).NotTo(HaveOccurred())
 

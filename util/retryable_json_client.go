@@ -1,6 +1,7 @@
 package util
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -31,12 +32,13 @@ func NewRetryableJSONClient(httpClient *http.Client) *RetryableJSONClient {
 	}
 }
 
-func (c *RetryableJSONClient) Post(url string, data interface{}) error {
+func (c *RetryableJSONClient) Post(ctx context.Context, url string, data interface{}) error {
 	jsonBody, err := json.Marshal(data)
 	if err != nil {
 		return errors.Wrap(err, "failed to marshal json body")
 	}
 
+	// TODO: use ctx in POST
 	resp, err := c.httpClient.Post(url, "application/json", jsonBody)
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)

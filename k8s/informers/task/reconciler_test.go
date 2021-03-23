@@ -122,7 +122,7 @@ var _ = Describe("Task Completion Reconciler", func() {
 
 	It("fetches the job by guid", func() {
 		Expect(jobsClient.GetByGUIDCallCount()).To(Equal(1))
-		actualGUID, actualIncludeCompleted := jobsClient.GetByGUIDArgsForCall(0)
+		_, actualGUID, actualIncludeCompleted := jobsClient.GetByGUIDArgsForCall(0)
 		Expect(actualGUID).To(Equal("the-task-pod-guid"))
 		Expect(actualIncludeCompleted).To(BeTrue())
 	})
@@ -133,13 +133,13 @@ var _ = Describe("Task Completion Reconciler", func() {
 		Expect(podsClient.SetAndTestAnnotationCallCount()).To(Equal(1))
 		Expect(podsClient.SetAnnotationCallCount()).To(Equal(1))
 
-		actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
+		_, actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
 		Expect(actualPod).To(Equal(pod))
 		Expect(key).To(Equal(jobs.AnnotationOpiTaskCompletionReportCounter))
 		Expect(value).To(Equal("1"))
 		Expect(prevValue).To(BeNil())
 
-		actualPod, key, value = podsClient.SetAnnotationArgsForCall(0)
+		_, actualPod, key, value = podsClient.SetAnnotationArgsForCall(0)
 		Expect(actualPod).To(Equal(pod))
 		Expect(key).To(Equal(jobs.AnnotationCCAckedTaskCompletion))
 		Expect(value).To(Equal(jobs.TaskCompletedTrue))
@@ -152,7 +152,7 @@ var _ = Describe("Task Completion Reconciler", func() {
 
 	It("labels the task as completed", func() {
 		Expect(jobsClient.SetLabelCallCount()).To(Equal(1))
-		_, label, value := jobsClient.SetLabelArgsForCall(0)
+		_, _, label, value := jobsClient.SetLabelArgsForCall(0)
 		Expect(label).To(Equal(jobs.LabelTaskCompleted))
 		Expect(value).To(Equal(jobs.TaskCompletedTrue))
 	})
@@ -305,7 +305,7 @@ var _ = Describe("Task Completion Reconciler", func() {
 
 		It("updates the pod setting the updated call count but not reporting success", func() {
 			Expect(podsClient.SetAndTestAnnotationCallCount()).To(Equal(1))
-			actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
+			_, actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
 			Expect(actualPod).To(Equal(pod))
 			Expect(key).To(Equal(jobs.AnnotationOpiTaskCompletionReportCounter))
 			Expect(value).To(Equal("1"))
@@ -319,7 +319,7 @@ var _ = Describe("Task Completion Reconciler", func() {
 		When("it's the first time", func() {
 			It("sets the 'retry counter' annotation", func() {
 				Expect(podsClient.SetAndTestAnnotationCallCount()).To(Equal(1))
-				actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
+				_, actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
 				Expect(actualPod).To(Equal(pod))
 				Expect(key).To(Equal(jobs.AnnotationOpiTaskCompletionReportCounter))
 				Expect(value).To(Equal("1"))
@@ -338,7 +338,7 @@ var _ = Describe("Task Completion Reconciler", func() {
 
 			It("increments the reporting count", func() {
 				Expect(podsClient.SetAndTestAnnotationCallCount()).To(Equal(1))
-				actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
+				_, actualPod, key, value, prevValue := podsClient.SetAndTestAnnotationArgsForCall(0)
 				Expect(actualPod).To(Equal(pod))
 				Expect(key).To(Equal(jobs.AnnotationOpiTaskCompletionReportCounter))
 				Expect(value).To(Equal("2"))
