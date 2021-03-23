@@ -70,6 +70,9 @@ EOF
   # generate config/eirini/_ytt_lib/eirini/rendered.yml
   ./build/eirini/build.sh
 
+  # build & bump cc
+  "$SCRIPT_DIR/patch-cc.sh"
+
   # deploy everything
   # install Calico to get NetworkPolicy support
   kapp deploy -y -a calico -f https://docs.projectcalico.org/manifests/calico.yaml

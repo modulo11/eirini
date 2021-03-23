@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -eu
+set -exu
 
 CCNG_DIR="$HOME/workspace/capi-release/src/cloud_controller_ng"
+CAPIK8S_DIR="$HOME/workspace/capi-k8s-release/"
 TAG=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)
 CCNG_IMAGE="eirini/dev-ccng"
 
@@ -59,11 +60,14 @@ EOF
 
 main() {
   build_ccng_image
-  publish-image
-  patch-cf-api-component cf-api-server
-  patch-cf-api-component cf-api-clock
-  patch-cf-api-component cf-api-worker
-  patch-cf-api-component cf-api-deployment-updater
+  # publish-image
+  push-to-docker
+  sed -i "s|ccng: .*$|ccng: $CCNG_IMAGE:$TAG|" "$CAPIK8S_DIR/values/images.yml"
+  "$CAPIK8S_DIR"/scripts/bump-cf-for-k8s.sh
+  # patch-cf-api-component cf-api-server
+  # patch-cf-api-component cf-api-clock
+  # patch-cf-api-component cf-api-worker
+  # patch-cf-api-component cf-api-deployment-updater
 }
 
 main
