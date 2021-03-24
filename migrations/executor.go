@@ -15,8 +15,8 @@ import (
 //counterfeiter:generate . StatefulsetsClient
 
 type StatefulsetsClient interface {
-	GetBySourceType(sourceType string) ([]appsv1.StatefulSet, error)
-	SetAnnotation(statefulSet *appsv1.StatefulSet, key, value string) (*appsv1.StatefulSet, error)
+	GetBySourceType(sourceType string) ([]appsv1.Deployment, error)
+	SetAnnotation(statefulSet *appsv1.Deployment, key, value string) (*appsv1.Deployment, error)
 }
 
 //counterfeiter:generate . MigrationStep

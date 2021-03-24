@@ -100,7 +100,7 @@ func main() {
 	err = builder.
 		ControllerManagedBy(mgr).
 		For(&eiriniv1.LRP{}).
-		Owns(&appsv1.StatefulSet{}).
+		Owns(&appsv1.Deployment{}).
 		Complete(lrpReconciler)
 	cmdcommons.ExitfIfError(err, "Failed to build LRP reconciler")
 

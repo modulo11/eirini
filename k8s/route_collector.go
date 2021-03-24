@@ -16,7 +16,7 @@ import (
 //counterfeiter:generate . StatefulSetGetter
 
 type StatefulSetGetter interface {
-	GetBySourceType(sourceType string) ([]appsv1.StatefulSet, error)
+	GetBySourceType(sourceType string) ([]appsv1.Deployment, error)
 }
 
 type RouteCollector struct {
@@ -72,7 +72,7 @@ func (c RouteCollector) Collect() ([]route.Message, error) {
 	return routeMessages, nil
 }
 
-func (c RouteCollector) getRoutes(pod corev1.Pod, statefulsets map[string]appsv1.StatefulSet) ([]cf.Route, error) {
+func (c RouteCollector) getRoutes(pod corev1.Pod, statefulsets map[string]appsv1.Deployment) ([]cf.Route, error) {
 	if !podReady(pod) {
 		return nil, fmt.Errorf("pod %s is not ready", pod.Name)
 	}
@@ -103,13 +103,13 @@ func (c RouteCollector) getRoutes(pod corev1.Pod, statefulsets map[string]appsv1
 	return routes, nil
 }
 
-func (c RouteCollector) getStatefulSets() (map[string]appsv1.StatefulSet, error) {
+func (c RouteCollector) getStatefulSets() (map[string]appsv1.Deployment, error) {
 	statefulsetList, err := c.statefulSetGetter.GetBySourceType(stset.AppSourceType)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to list statefulsets")
 	}
 
-	statefulsetsMap := make(map[string]appsv1.StatefulSet)
+	statefulsetsMap := make(map[string]appsv1.Deployment)
 
 	for _, s := range statefulsetList {
 		statefulsetsMap[s.Name] = s

@@ -21,7 +21,7 @@ import (
 //counterfeiter:generate . PodDisruptionBudgetUpdater
 
 type LRPToStatefulSetConverter interface {
-	Convert(statefulSetName string, lrp *opi.LRP) (*appsv1.StatefulSet, error)
+	Convert(statefulSetName string, lrp *opi.LRP) (*appsv1.Deployment, error)
 }
 
 type SecretsCreator interface {
@@ -29,7 +29,7 @@ type SecretsCreator interface {
 }
 
 type StatefulSetCreator interface {
-	Create(namespace string, statefulSet *appsv1.StatefulSet) (*appsv1.StatefulSet, error)
+	Create(namespace string, statefulSet *appsv1.Deployment) (*appsv1.Deployment, error)
 }
 
 type PodDisruptionBudgetUpdater interface {

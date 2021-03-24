@@ -226,14 +226,14 @@ func GetPDB(clientset kubernetes.Interface, namespace, lrpGUID, lrpVersion strin
 	return pdbs[0]
 }
 
-func GetStatefulSet(clientset kubernetes.Interface, namespace, guid, version string) *appsv1.StatefulSet {
+func GetStatefulSet(clientset kubernetes.Interface, namespace, guid, version string) *appsv1.Deployment {
 	appListOpts := metav1.ListOptions{
 		LabelSelector: fmt.Sprintf("%s=%s,%s=%s", stset.LabelGUID, guid, stset.LabelVersion, version),
 	}
 
 	stsList, err := clientset.
 		AppsV1().
-		StatefulSets(namespace).
+		Deployments(namespace).
 		List(context.Background(), appListOpts)
 
 	Expect(err).NotTo(HaveOccurred())

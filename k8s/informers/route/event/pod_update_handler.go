@@ -16,7 +16,7 @@ import (
 //counterfeiter:generate . StatefulSetGetter
 
 type StatefulSetGetter interface {
-	Get(namespace, name string) (*appsv1.StatefulSet, error)
+	Get(namespace, name string) (*appsv1.Deployment, error)
 }
 
 type PodUpdateHandler struct {
@@ -86,7 +86,7 @@ func (h PodUpdateHandler) getUserDefinedRoutes(pod *corev1.Pod) ([]cf.Route, err
 	return decodeRoutes(owner.Annotations[stset.AnnotationRegisteredRoutes])
 }
 
-func (h PodUpdateHandler) getOwner(pod *corev1.Pod) (*appsv1.StatefulSet, error) {
+func (h PodUpdateHandler) getOwner(pod *corev1.Pod) (*appsv1.Deployment, error) {
 	ownerReferences := pod.OwnerReferences
 
 	if len(ownerReferences) == 0 {

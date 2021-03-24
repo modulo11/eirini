@@ -105,11 +105,11 @@ func (p TestingAnnotationPatch) GetPatchBytes() []byte {
 }
 
 type CPURequestPatch struct {
-	stSet *appsv1.StatefulSet
+	stSet *appsv1.Deployment
 	value *resource.Quantity
 }
 
-func NewCPURequestPatch(stSet *appsv1.StatefulSet, value *resource.Quantity) CPURequestPatch {
+func NewCPURequestPatch(stSet *appsv1.Deployment, value *resource.Quantity) CPURequestPatch {
 	return CPURequestPatch{
 		stSet: stSet,
 		value: value,

@@ -9,17 +9,17 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
-type StatefulSetToLRP func(s appsv1.StatefulSet) (*opi.LRP, error)
+type StatefulSetToLRP func(s appsv1.Deployment) (*opi.LRP, error)
 
 func NewStatefulSetToLRPConverter() StatefulSetToLRP {
 	return MapStatefulSetToLRP
 }
 
-func (f StatefulSetToLRP) Convert(s appsv1.StatefulSet) (*opi.LRP, error) {
+func (f StatefulSetToLRP) Convert(s appsv1.Deployment) (*opi.LRP, error) {
 	return f(s)
 }
 
-func MapStatefulSetToLRP(s appsv1.StatefulSet) (*opi.LRP, error) {
+func MapStatefulSetToLRP(s appsv1.Deployment) (*opi.LRP, error) {
 	stRoutes := s.Annotations[AnnotationRegisteredRoutes]
 
 	var uris []opi.Route

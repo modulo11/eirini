@@ -10,29 +10,29 @@ import (
 )
 
 type FakeCPURequestSetter struct {
-	SetCPURequestStub        func(*v1.StatefulSet, *resource.Quantity) (*v1.StatefulSet, error)
+	SetCPURequestStub        func(*v1.Deployment, *resource.Quantity) (*v1.Deployment, error)
 	setCPURequestMutex       sync.RWMutex
 	setCPURequestArgsForCall []struct {
-		arg1 *v1.StatefulSet
+		arg1 *v1.Deployment
 		arg2 *resource.Quantity
 	}
 	setCPURequestReturns struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	setCPURequestReturnsOnCall map[int]struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeCPURequestSetter) SetCPURequest(arg1 *v1.StatefulSet, arg2 *resource.Quantity) (*v1.StatefulSet, error) {
+func (fake *FakeCPURequestSetter) SetCPURequest(arg1 *v1.Deployment, arg2 *resource.Quantity) (*v1.Deployment, error) {
 	fake.setCPURequestMutex.Lock()
 	ret, specificReturn := fake.setCPURequestReturnsOnCall[len(fake.setCPURequestArgsForCall)]
 	fake.setCPURequestArgsForCall = append(fake.setCPURequestArgsForCall, struct {
-		arg1 *v1.StatefulSet
+		arg1 *v1.Deployment
 		arg2 *resource.Quantity
 	}{arg1, arg2})
 	stub := fake.SetCPURequestStub
@@ -54,41 +54,41 @@ func (fake *FakeCPURequestSetter) SetCPURequestCallCount() int {
 	return len(fake.setCPURequestArgsForCall)
 }
 
-func (fake *FakeCPURequestSetter) SetCPURequestCalls(stub func(*v1.StatefulSet, *resource.Quantity) (*v1.StatefulSet, error)) {
+func (fake *FakeCPURequestSetter) SetCPURequestCalls(stub func(*v1.Deployment, *resource.Quantity) (*v1.Deployment, error)) {
 	fake.setCPURequestMutex.Lock()
 	defer fake.setCPURequestMutex.Unlock()
 	fake.SetCPURequestStub = stub
 }
 
-func (fake *FakeCPURequestSetter) SetCPURequestArgsForCall(i int) (*v1.StatefulSet, *resource.Quantity) {
+func (fake *FakeCPURequestSetter) SetCPURequestArgsForCall(i int) (*v1.Deployment, *resource.Quantity) {
 	fake.setCPURequestMutex.RLock()
 	defer fake.setCPURequestMutex.RUnlock()
 	argsForCall := fake.setCPURequestArgsForCall[i]
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *FakeCPURequestSetter) SetCPURequestReturns(result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeCPURequestSetter) SetCPURequestReturns(result1 *v1.Deployment, result2 error) {
 	fake.setCPURequestMutex.Lock()
 	defer fake.setCPURequestMutex.Unlock()
 	fake.SetCPURequestStub = nil
 	fake.setCPURequestReturns = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeCPURequestSetter) SetCPURequestReturnsOnCall(i int, result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeCPURequestSetter) SetCPURequestReturnsOnCall(i int, result1 *v1.Deployment, result2 error) {
 	fake.setCPURequestMutex.Lock()
 	defer fake.setCPURequestMutex.Unlock()
 	fake.SetCPURequestStub = nil
 	if fake.setCPURequestReturnsOnCall == nil {
 		fake.setCPURequestReturnsOnCall = make(map[int]struct {
-			result1 *v1.StatefulSet
+			result1 *v1.Deployment
 			result2 error
 		})
 	}
 	fake.setCPURequestReturnsOnCall[i] = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }

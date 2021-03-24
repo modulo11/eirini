@@ -9,19 +9,19 @@ import (
 )
 
 type FakeStatefulSetDeleteEventHandler struct {
-	HandleStub        func(*v1.StatefulSet)
+	HandleStub        func(*v1.Deployment)
 	handleMutex       sync.RWMutex
 	handleArgsForCall []struct {
-		arg1 *v1.StatefulSet
+		arg1 *v1.Deployment
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeStatefulSetDeleteEventHandler) Handle(arg1 *v1.StatefulSet) {
+func (fake *FakeStatefulSetDeleteEventHandler) Handle(arg1 *v1.Deployment) {
 	fake.handleMutex.Lock()
 	fake.handleArgsForCall = append(fake.handleArgsForCall, struct {
-		arg1 *v1.StatefulSet
+		arg1 *v1.Deployment
 	}{arg1})
 	stub := fake.HandleStub
 	fake.recordInvocation("Handle", []interface{}{arg1})
@@ -37,13 +37,13 @@ func (fake *FakeStatefulSetDeleteEventHandler) HandleCallCount() int {
 	return len(fake.handleArgsForCall)
 }
 
-func (fake *FakeStatefulSetDeleteEventHandler) HandleCalls(stub func(*v1.StatefulSet)) {
+func (fake *FakeStatefulSetDeleteEventHandler) HandleCalls(stub func(*v1.Deployment)) {
 	fake.handleMutex.Lock()
 	defer fake.handleMutex.Unlock()
 	fake.HandleStub = stub
 }
 
-func (fake *FakeStatefulSetDeleteEventHandler) HandleArgsForCall(i int) *v1.StatefulSet {
+func (fake *FakeStatefulSetDeleteEventHandler) HandleArgsForCall(i int) *v1.Deployment {
 	fake.handleMutex.RLock()
 	defer fake.handleMutex.RUnlock()
 	argsForCall := fake.handleArgsForCall[i]

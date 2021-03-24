@@ -10,25 +10,25 @@ import (
 )
 
 type FakeLRPToStatefulSetConverter struct {
-	ConvertStub        func(string, *opi.LRP) (*v1.StatefulSet, error)
+	ConvertStub        func(string, *opi.LRP) (*v1.Deployment, error)
 	convertMutex       sync.RWMutex
 	convertArgsForCall []struct {
 		arg1 string
 		arg2 *opi.LRP
 	}
 	convertReturns struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	convertReturnsOnCall map[int]struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeLRPToStatefulSetConverter) Convert(arg1 string, arg2 *opi.LRP) (*v1.StatefulSet, error) {
+func (fake *FakeLRPToStatefulSetConverter) Convert(arg1 string, arg2 *opi.LRP) (*v1.Deployment, error) {
 	fake.convertMutex.Lock()
 	ret, specificReturn := fake.convertReturnsOnCall[len(fake.convertArgsForCall)]
 	fake.convertArgsForCall = append(fake.convertArgsForCall, struct {
@@ -54,7 +54,7 @@ func (fake *FakeLRPToStatefulSetConverter) ConvertCallCount() int {
 	return len(fake.convertArgsForCall)
 }
 
-func (fake *FakeLRPToStatefulSetConverter) ConvertCalls(stub func(string, *opi.LRP) (*v1.StatefulSet, error)) {
+func (fake *FakeLRPToStatefulSetConverter) ConvertCalls(stub func(string, *opi.LRP) (*v1.Deployment, error)) {
 	fake.convertMutex.Lock()
 	defer fake.convertMutex.Unlock()
 	fake.ConvertStub = stub
@@ -67,28 +67,28 @@ func (fake *FakeLRPToStatefulSetConverter) ConvertArgsForCall(i int) (string, *o
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *FakeLRPToStatefulSetConverter) ConvertReturns(result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeLRPToStatefulSetConverter) ConvertReturns(result1 *v1.Deployment, result2 error) {
 	fake.convertMutex.Lock()
 	defer fake.convertMutex.Unlock()
 	fake.ConvertStub = nil
 	fake.convertReturns = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeLRPToStatefulSetConverter) ConvertReturnsOnCall(i int, result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeLRPToStatefulSetConverter) ConvertReturnsOnCall(i int, result1 *v1.Deployment, result2 error) {
 	fake.convertMutex.Lock()
 	defer fake.convertMutex.Unlock()
 	fake.ConvertStub = nil
 	if fake.convertReturnsOnCall == nil {
 		fake.convertReturnsOnCall = make(map[int]struct {
-			result1 *v1.StatefulSet
+			result1 *v1.Deployment
 			result2 error
 		})
 	}
 	fake.convertReturnsOnCall[i] = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }

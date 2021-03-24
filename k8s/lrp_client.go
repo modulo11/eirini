@@ -20,11 +20,11 @@ type PodDisruptionBudgetClient interface {
 }
 
 type StatefulSetClient interface {
-	Create(namespace string, statefulSet *appsv1.StatefulSet) (*appsv1.StatefulSet, error)
-	Update(namespace string, statefulSet *appsv1.StatefulSet) (*appsv1.StatefulSet, error)
+	Create(namespace string, statefulSet *appsv1.Deployment) (*appsv1.Deployment, error)
+	Update(namespace string, statefulSet *appsv1.Deployment) (*appsv1.Deployment, error)
 	Delete(namespace string, name string) error
-	GetBySourceType(sourceType string) ([]appsv1.StatefulSet, error)
-	GetByLRPIdentifier(id opi.LRPIdentifier) ([]appsv1.StatefulSet, error)
+	GetBySourceType(sourceType string) ([]appsv1.Deployment, error)
+	GetByLRPIdentifier(id opi.LRPIdentifier) ([]appsv1.Deployment, error)
 }
 
 type SecretsClient interface {

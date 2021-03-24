@@ -24,7 +24,7 @@ type URIAnnotationUpdateHandler struct {
 	RouteEmitter eiriniroute.Emitter
 }
 
-func (h URIAnnotationUpdateHandler) Handle(oldStatefulSet, updatedStatefulSet *appsv1.StatefulSet) {
+func (h URIAnnotationUpdateHandler) Handle(oldStatefulSet, updatedStatefulSet *appsv1.Deployment) {
 	if reflect.DeepEqual(oldStatefulSet.Annotations, updatedStatefulSet.Annotations) {
 		return
 	}
@@ -32,7 +32,7 @@ func (h URIAnnotationUpdateHandler) Handle(oldStatefulSet, updatedStatefulSet *a
 	h.onUpdate(oldStatefulSet, updatedStatefulSet)
 }
 
-func (h URIAnnotationUpdateHandler) onUpdate(oldStatefulSet, updatedStatefulSet *appsv1.StatefulSet) {
+func (h URIAnnotationUpdateHandler) onUpdate(oldStatefulSet, updatedStatefulSet *appsv1.Deployment) {
 	loggerSession := h.Logger.Session("statefulset-update", lager.Data{"guid": updatedStatefulSet.Annotations[stset.AnnotationProcessGUID]})
 
 	updatedSet, err := decodeRoutesAsSet(updatedStatefulSet)
@@ -60,7 +60,7 @@ func (h URIAnnotationUpdateHandler) onUpdate(oldStatefulSet, updatedStatefulSet 
 	}
 }
 
-func (h URIAnnotationUpdateHandler) createRoutesOnUpdate(loggerSession lager.Logger, statefulset *appsv1.StatefulSet, grouped portGroup) []*eiriniroute.Message {
+func (h URIAnnotationUpdateHandler) createRoutesOnUpdate(loggerSession lager.Logger, statefulset *appsv1.Deployment, grouped portGroup) []*eiriniroute.Message {
 	pods, err := getChildrenPods(h.Pods, statefulset)
 	if err != nil {
 		loggerSession.Error("failed-to-get-child-pods", err)
@@ -120,7 +120,7 @@ func groupRoutesByPort(remove, add set.Set) portGroup {
 	return group
 }
 
-func decodeRoutesAsSet(statefulset *appsv1.StatefulSet) (set.Set, error) {
+func decodeRoutesAsSet(statefulset *appsv1.Deployment) (set.Set, error) {
 	routes := set.NewSet()
 
 	updatedUserDefinedRoutes, err := decodeRoutes(statefulset.Annotations[stset.AnnotationRegisteredRoutes])

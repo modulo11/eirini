@@ -9,30 +9,30 @@ import (
 )
 
 type FakeStatefulSetCreator struct {
-	CreateStub        func(string, *v1.StatefulSet) (*v1.StatefulSet, error)
+	CreateStub        func(string, *v1.Deployment) (*v1.Deployment, error)
 	createMutex       sync.RWMutex
 	createArgsForCall []struct {
 		arg1 string
-		arg2 *v1.StatefulSet
+		arg2 *v1.Deployment
 	}
 	createReturns struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	createReturnsOnCall map[int]struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeStatefulSetCreator) Create(arg1 string, arg2 *v1.StatefulSet) (*v1.StatefulSet, error) {
+func (fake *FakeStatefulSetCreator) Create(arg1 string, arg2 *v1.Deployment) (*v1.Deployment, error) {
 	fake.createMutex.Lock()
 	ret, specificReturn := fake.createReturnsOnCall[len(fake.createArgsForCall)]
 	fake.createArgsForCall = append(fake.createArgsForCall, struct {
 		arg1 string
-		arg2 *v1.StatefulSet
+		arg2 *v1.Deployment
 	}{arg1, arg2})
 	stub := fake.CreateStub
 	fakeReturns := fake.createReturns
@@ -53,41 +53,41 @@ func (fake *FakeStatefulSetCreator) CreateCallCount() int {
 	return len(fake.createArgsForCall)
 }
 
-func (fake *FakeStatefulSetCreator) CreateCalls(stub func(string, *v1.StatefulSet) (*v1.StatefulSet, error)) {
+func (fake *FakeStatefulSetCreator) CreateCalls(stub func(string, *v1.Deployment) (*v1.Deployment, error)) {
 	fake.createMutex.Lock()
 	defer fake.createMutex.Unlock()
 	fake.CreateStub = stub
 }
 
-func (fake *FakeStatefulSetCreator) CreateArgsForCall(i int) (string, *v1.StatefulSet) {
+func (fake *FakeStatefulSetCreator) CreateArgsForCall(i int) (string, *v1.Deployment) {
 	fake.createMutex.RLock()
 	defer fake.createMutex.RUnlock()
 	argsForCall := fake.createArgsForCall[i]
 	return argsForCall.arg1, argsForCall.arg2
 }
 
-func (fake *FakeStatefulSetCreator) CreateReturns(result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeStatefulSetCreator) CreateReturns(result1 *v1.Deployment, result2 error) {
 	fake.createMutex.Lock()
 	defer fake.createMutex.Unlock()
 	fake.CreateStub = nil
 	fake.createReturns = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeStatefulSetCreator) CreateReturnsOnCall(i int, result1 *v1.StatefulSet, result2 error) {
+func (fake *FakeStatefulSetCreator) CreateReturnsOnCall(i int, result1 *v1.Deployment, result2 error) {
 	fake.createMutex.Lock()
 	defer fake.createMutex.Unlock()
 	fake.CreateStub = nil
 	if fake.createReturnsOnCall == nil {
 		fake.createReturnsOnCall = make(map[int]struct {
-			result1 *v1.StatefulSet
+			result1 *v1.Deployment
 			result2 error
 		})
 	}
 	fake.createReturnsOnCall[i] = struct {
-		result1 *v1.StatefulSet
+		result1 *v1.Deployment
 		result2 error
 	}{result1, result2}
 }

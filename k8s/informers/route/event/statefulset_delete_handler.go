@@ -21,7 +21,7 @@ type StatefulSetDeleteHandler struct {
 	RouteEmitter eiriniroute.Emitter
 }
 
-func (h StatefulSetDeleteHandler) Handle(deletedStatefulSet *appsv1.StatefulSet) {
+func (h StatefulSetDeleteHandler) Handle(deletedStatefulSet *appsv1.Deployment) {
 	loggerSession := h.Logger.Session("statefulset-delete", lager.Data{"guid": deletedStatefulSet.Annotations[stset.AnnotationProcessGUID]})
 
 	routeSet, err := decodeRoutesAsSet(deletedStatefulSet)
@@ -43,7 +43,7 @@ func (h StatefulSetDeleteHandler) Handle(deletedStatefulSet *appsv1.StatefulSet)
 	}
 }
 
-func (h StatefulSetDeleteHandler) createRoutesOnDelete(loggerSession lager.Logger, statefulset *appsv1.StatefulSet, grouped portGroup) []*eiriniroute.Message {
+func (h StatefulSetDeleteHandler) createRoutesOnDelete(loggerSession lager.Logger, statefulset *appsv1.Deployment, grouped portGroup) []*eiriniroute.Message {
 	pods, err := getChildrenPods(h.Pods, statefulset)
 	if err != nil {
 		loggerSession.Error("failed-to-get-child-pods", err)
@@ -59,7 +59,7 @@ func (h StatefulSetDeleteHandler) createRoutesOnDelete(loggerSession lager.Logge
 	return resultRoutes
 }
 
-func getChildrenPods(podClient typedv1.PodInterface, st *appsv1.StatefulSet) ([]corev1.Pod, error) {
+func getChildrenPods(podClient typedv1.PodInterface, st *appsv1.Deployment) ([]corev1.Pod, error) {
 	set := labels.Set(st.Spec.Selector.MatchLabels)
 	opts := metav1.ListOptions{LabelSelector: set.AsSelector().String()}
 

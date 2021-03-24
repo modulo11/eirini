@@ -9,24 +9,24 @@ import (
 )
 
 type FakeStatefulSetsBySourceTypeGetter struct {
-	GetBySourceTypeStub        func(string) ([]v1.StatefulSet, error)
+	GetBySourceTypeStub        func(string) ([]v1.Deployment, error)
 	getBySourceTypeMutex       sync.RWMutex
 	getBySourceTypeArgsForCall []struct {
 		arg1 string
 	}
 	getBySourceTypeReturns struct {
-		result1 []v1.StatefulSet
+		result1 []v1.Deployment
 		result2 error
 	}
 	getBySourceTypeReturnsOnCall map[int]struct {
-		result1 []v1.StatefulSet
+		result1 []v1.Deployment
 		result2 error
 	}
 	invocations      map[string][][]interface{}
 	invocationsMutex sync.RWMutex
 }
 
-func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceType(arg1 string) ([]v1.StatefulSet, error) {
+func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceType(arg1 string) ([]v1.Deployment, error) {
 	fake.getBySourceTypeMutex.Lock()
 	ret, specificReturn := fake.getBySourceTypeReturnsOnCall[len(fake.getBySourceTypeArgsForCall)]
 	fake.getBySourceTypeArgsForCall = append(fake.getBySourceTypeArgsForCall, struct {
@@ -51,7 +51,7 @@ func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeCallCount() int {
 	return len(fake.getBySourceTypeArgsForCall)
 }
 
-func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeCalls(stub func(string) ([]v1.StatefulSet, error)) {
+func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeCalls(stub func(string) ([]v1.Deployment, error)) {
 	fake.getBySourceTypeMutex.Lock()
 	defer fake.getBySourceTypeMutex.Unlock()
 	fake.GetBySourceTypeStub = stub
@@ -64,28 +64,28 @@ func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeArgsForCall(i int
 	return argsForCall.arg1
 }
 
-func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeReturns(result1 []v1.StatefulSet, result2 error) {
+func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeReturns(result1 []v1.Deployment, result2 error) {
 	fake.getBySourceTypeMutex.Lock()
 	defer fake.getBySourceTypeMutex.Unlock()
 	fake.GetBySourceTypeStub = nil
 	fake.getBySourceTypeReturns = struct {
-		result1 []v1.StatefulSet
+		result1 []v1.Deployment
 		result2 error
 	}{result1, result2}
 }
 
-func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeReturnsOnCall(i int, result1 []v1.StatefulSet, result2 error) {
+func (fake *FakeStatefulSetsBySourceTypeGetter) GetBySourceTypeReturnsOnCall(i int, result1 []v1.Deployment, result2 error) {
 	fake.getBySourceTypeMutex.Lock()
 	defer fake.getBySourceTypeMutex.Unlock()
 	fake.GetBySourceTypeStub = nil
 	if fake.getBySourceTypeReturnsOnCall == nil {
 		fake.getBySourceTypeReturnsOnCall = make(map[int]struct {
-			result1 []v1.StatefulSet
+			result1 []v1.Deployment
 			result2 error
 		})
 	}
 	fake.getBySourceTypeReturnsOnCall[i] = struct {
-		result1 []v1.StatefulSet
+		result1 []v1.Deployment
 		result2 error
 	}{result1, result2}
 }

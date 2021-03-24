@@ -107,7 +107,7 @@ func (s *Stopper) stop(identifier opi.LRPIdentifier) error {
 	return nil
 }
 
-func (s *Stopper) deletePrivateRegistrySecret(statefulSet *appsv1.StatefulSet) error {
+func (s *Stopper) deletePrivateRegistrySecret(statefulSet *appsv1.Deployment) error {
 	for _, secret := range statefulSet.Spec.Template.Spec.ImagePullSecrets {
 		if secret.Name == privateRegistrySecretName(statefulSet.Name) {
 			return s.secretsDeleter.Delete(statefulSet.Namespace, secret.Name)

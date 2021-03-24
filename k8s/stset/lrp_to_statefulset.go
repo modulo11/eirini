@@ -50,7 +50,7 @@ func NewLRPToStatefulSetConverter(
 	}
 }
 
-func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv1.StatefulSet, error) {
+func (c *LRPToStatefulSet) Convert(deploymentName string, lrp *opi.LRP) (*appsv1.Deployment, error) {
 	envs := shared.MapToEnvVar(lrp.Env)
 	fieldEnvs := []corev1.EnvVar{
 		{
@@ -99,7 +99,7 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 
 	volumes, volumeMounts := getVolumeSpecs(lrp.VolumeMounts)
 	allowPrivilegeEscalation := false
-	imagePullSecrets := c.calculateImagePullSecrets(statefulSetName, lrp)
+	imagePullSecrets := c.calculateImagePullSecrets(deploymentName, lrp)
 
 	containers := []corev1.Container{
 		{
@@ -121,13 +121,12 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 
 	sidecarContainers := getSidecarContainers(lrp)
 	containers = append(containers, sidecarContainers...)
-	statefulSet := &appsv1.StatefulSet{
+	deployment := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name: statefulSetName,
+			Name: deploymentName,
 		},
-		Spec: appsv1.StatefulSetSpec{
-			PodManagementPolicy: "Parallel",
-			Replicas:            int32ptr(lrp.TargetInstances),
+		Spec: appsv1.DeploymentSpec{
+			Replicas: int32ptr(lrp.TargetInstances),
 			Template: corev1.PodTemplateSpec{
 				Spec: corev1.PodSpec{
 					Containers:         containers,
@@ -142,12 +141,12 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 
 	if !c.allowAutomountServiceAccountToken {
 		automountServiceAccountToken := false
-		statefulSet.Spec.Template.Spec.AutomountServiceAccountToken = &automountServiceAccountToken
+		deployment.Spec.Template.Spec.AutomountServiceAccountToken = &automountServiceAccountToken
 	}
 
-	statefulSet.Spec.Selector = StatefulSetLabelSelector(lrp)
+	deployment.Spec.Selector = StatefulSetLabelSelector(lrp)
 
-	statefulSet.Spec.Template.Spec.Affinity = &corev1.Affinity{
+	deployment.Spec.Template.Spec.Affinity = &corev1.Affinity{
 		PodAntiAffinity: &corev1.PodAntiAffinity{
 			PreferredDuringSchedulingIgnoredDuringExecution: []corev1.WeightedPodAffinityTerm{
 				{
@@ -155,7 +154,7 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 					PodAffinityTerm: corev1.PodAffinityTerm{
 						TopologyKey: corev1.LabelHostname,
 						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: toLabelSelectorRequirements(statefulSet.Spec.Selector),
+							MatchExpressions: toLabelSelectorRequirements(deployment.Spec.Selector),
 						},
 					},
 				},
@@ -175,8 +174,8 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 		LabelSourceType:  AppSourceType,
 	}
 
-	statefulSet.Spec.Template.Labels = labels
-	statefulSet.Labels = labels
+	deployment.Spec.Template.Labels = labels
+	deployment.Labels = labels
 
 	uris, err := json.Marshal(lrp.AppURIs)
 	if err != nil {
@@ -202,11 +201,11 @@ func (c *LRPToStatefulSet) Convert(statefulSetName string, lrp *opi.LRP) (*appsv
 		annotations[k] = v
 	}
 
-	statefulSet.Annotations = annotations
-	statefulSet.Spec.Template.Annotations = annotations
-	statefulSet.Spec.Template.Annotations[corev1.SeccompPodAnnotationKey] = corev1.SeccompProfileRuntimeDefault
+	deployment.Annotations = annotations
+	deployment.Spec.Template.Annotations = annotations
+	deployment.Spec.Template.Annotations[corev1.SeccompPodAnnotationKey] = corev1.SeccompProfileRuntimeDefault
 
-	return statefulSet, nil
+	return deployment, nil
 }
 
 func (c *LRPToStatefulSet) calculateImagePullSecrets(statefulSetName string, lrp *opi.LRP) []corev1.LocalObjectReference {

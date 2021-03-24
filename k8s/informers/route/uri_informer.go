@@ -16,11 +16,11 @@ import (
 //counterfeiter:generate . StatefulSetDeleteEventHandler
 
 type StatefulSetUpdateEventHandler interface {
-	Handle(oldObj, updatedObj *appsv1.StatefulSet)
+	Handle(oldObj, updatedObj *appsv1.Deployment)
 }
 
 type StatefulSetDeleteEventHandler interface {
-	Handle(obj *appsv1.StatefulSet)
+	Handle(obj *appsv1.Deployment)
 }
 
 type URIChangeInformer struct {
@@ -49,12 +49,12 @@ func (i *URIChangeInformer) Start() {
 	informer := factory.Apps().V1().StatefulSets().Informer()
 	informer.AddEventHandler(cache.ResourceEventHandlerFuncs{
 		UpdateFunc: func(oldObj, updatedObj interface{}) {
-			oldStatefulSet := oldObj.(*appsv1.StatefulSet)         //nolint:forcetypeassert
-			updatedStatefulSet := updatedObj.(*appsv1.StatefulSet) //nolint:forcetypeassert
+			oldStatefulSet := oldObj.(*appsv1.Deployment)         //nolint:forcetypeassert
+			updatedStatefulSet := updatedObj.(*appsv1.Deployment) //nolint:forcetypeassert
 			i.UpdateHandler.Handle(oldStatefulSet, updatedStatefulSet)
 		},
 		DeleteFunc: func(obj interface{}) {
-			statefulSet := obj.(*appsv1.StatefulSet) //nolint:forcetypeassert
+			statefulSet := obj.(*appsv1.Deployment) //nolint:forcetypeassert
 			i.DeleteHandler.Handle(statefulSet)
 		},
 	})

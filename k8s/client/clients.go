@@ -115,16 +115,16 @@ func NewStatefulSet(clientSet kubernetes.Interface, workloadsNamespace string) *
 	}
 }
 
-func (c *StatefulSet) Create(namespace string, statefulSet *appsv1.StatefulSet) (*appsv1.StatefulSet, error) {
-	return c.clientSet.AppsV1().StatefulSets(namespace).Create(context.Background(), statefulSet, metav1.CreateOptions{})
+func (c *StatefulSet) Create(namespace string, deployment *appsv1.Deployment) (*appsv1.Deployment, error) {
+	return c.clientSet.AppsV1().Deployments(namespace).Create(context.Background(), deployment, metav1.CreateOptions{})
 }
 
-func (c *StatefulSet) Get(namespace, name string) (*appsv1.StatefulSet, error) {
-	return c.clientSet.AppsV1().StatefulSets(namespace).Get(context.Background(), name, metav1.GetOptions{})
+func (c *StatefulSet) Get(namespace, name string) (*appsv1.Deployment, error) {
+	return c.clientSet.AppsV1().Deployments(namespace).Get(context.Background(), name, metav1.GetOptions{})
 }
 
-func (c *StatefulSet) GetBySourceType(sourceType string) ([]appsv1.StatefulSet, error) {
-	statefulSetList, err := c.clientSet.AppsV1().StatefulSets(c.workloadsNamespace).List(context.Background(), metav1.ListOptions{
+func (c *StatefulSet) GetBySourceType(sourceType string) ([]appsv1.Deployment, error) {
+	statefulSetList, err := c.clientSet.AppsV1().Deployments(c.workloadsNamespace).List(context.Background(), metav1.ListOptions{
 		LabelSelector: fmt.Sprintf("%s=%s", stset.LabelSourceType, sourceType),
 	})
 	if err != nil {
@@ -134,8 +134,8 @@ func (c *StatefulSet) GetBySourceType(sourceType string) ([]appsv1.StatefulSet, 
 	return statefulSetList.Items, nil
 }
 
-func (c *StatefulSet) GetByLRPIdentifier(id opi.LRPIdentifier) ([]appsv1.StatefulSet, error) {
-	statefulSetList, err := c.clientSet.AppsV1().StatefulSets(c.workloadsNamespace).List(context.Background(), metav1.ListOptions{
+func (c *StatefulSet) GetByLRPIdentifier(id opi.LRPIdentifier) ([]appsv1.Deployment, error) {
+	statefulSetList, err := c.clientSet.AppsV1().Deployments(c.workloadsNamespace).List(context.Background(), metav1.ListOptions{
 		LabelSelector: fmt.Sprintf(
 			"%s=%s,%s=%s",
 			stset.LabelGUID, id.GUID,
@@ -149,14 +149,14 @@ func (c *StatefulSet) GetByLRPIdentifier(id opi.LRPIdentifier) ([]appsv1.Statefu
 	return statefulSetList.Items, nil
 }
 
-func (c *StatefulSet) Update(namespace string, statefulSet *appsv1.StatefulSet) (*appsv1.StatefulSet, error) {
-	return c.clientSet.AppsV1().StatefulSets(namespace).Update(context.Background(), statefulSet, metav1.UpdateOptions{})
+func (c *StatefulSet) Update(namespace string, statefulSet *appsv1.Deployment) (*appsv1.Deployment, error) {
+	return c.clientSet.AppsV1().Deployments(namespace).Update(context.Background(), statefulSet, metav1.UpdateOptions{})
 }
 
-func (c *StatefulSet) SetAnnotation(statefulSet *appsv1.StatefulSet, key, value string) (*appsv1.StatefulSet, error) {
+func (c *StatefulSet) SetAnnotation(statefulSet *appsv1.Deployment, key, value string) (*appsv1.Deployment, error) {
 	annotation := patching.NewAnnotation(key, value)
 
-	return c.clientSet.AppsV1().StatefulSets(statefulSet.Namespace).Patch(
+	return c.clientSet.AppsV1().Deployments(statefulSet.Namespace).Patch(
 		context.Background(),
 		statefulSet.Name,
 		annotation.Type(),
@@ -165,10 +165,10 @@ func (c *StatefulSet) SetAnnotation(statefulSet *appsv1.StatefulSet, key, value 
 	)
 }
 
-func (c *StatefulSet) SetCPURequest(statefulSet *appsv1.StatefulSet, cpuRequest *resource.Quantity) (*appsv1.StatefulSet, error) {
+func (c *StatefulSet) SetCPURequest(statefulSet *appsv1.Deployment, cpuRequest *resource.Quantity) (*appsv1.Deployment, error) {
 	cpuRequestPatch := patching.NewCPURequestPatch(statefulSet, cpuRequest)
 
-	return c.clientSet.AppsV1().StatefulSets(statefulSet.Namespace).Patch(
+	return c.clientSet.AppsV1().Deployments(statefulSet.Namespace).Patch(
 		context.Background(),
 		statefulSet.Name,
 		cpuRequestPatch.Type(),
@@ -180,7 +180,7 @@ func (c *StatefulSet) SetCPURequest(statefulSet *appsv1.StatefulSet, cpuRequest 
 func (c *StatefulSet) Delete(namespace string, name string) error {
 	backgroundPropagation := metav1.DeletePropagationBackground
 
-	return c.clientSet.AppsV1().StatefulSets(namespace).Delete(context.Background(), name, metav1.DeleteOptions{
+	return c.clientSet.AppsV1().Deployments(namespace).Delete(context.Background(), name, metav1.DeleteOptions{
 		PropagationPolicy: &backgroundPropagation,
 	})
 }
